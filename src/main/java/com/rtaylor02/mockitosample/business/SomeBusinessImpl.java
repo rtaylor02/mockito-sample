@@ -9,6 +9,10 @@ public class SomeBusinessImpl {
         return service;
     }
 
+    public void setService(SomeDataService service) {
+        this.service = service;
+    }
+
     public int sum(int[] array) {
         int result = 0;
 
