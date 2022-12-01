@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import static org.mockito.Mockito.*;
 
 public class SpyTest {
+    /*
+    With spy (instead of mock), the original behaviour of the class/interface is retained.
+    You can stub(override) and verify specific behaviour(methods) on spy.
+     */
     @Test
     void spying() {
         ArrayList arrayListSpy = spy(ArrayList.class);
