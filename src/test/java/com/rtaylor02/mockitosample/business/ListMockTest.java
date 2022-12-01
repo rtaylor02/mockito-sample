@@ -48,7 +48,7 @@ public class ListMockTest {
         mock.get(0);
         mock.get(1);
 
-        verify(mock).get(0);
+        verify(mock).get(0); // Check that method get() with argument 0 is called once
 
         verify(mock, times(2)).get(anyInt());
         verify(mock, atLeast(1)).get(anyInt());
