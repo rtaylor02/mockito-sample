@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -98,5 +99,19 @@ public class ListMockTest {
         assertEquals("Kasia", allArguments.get(1));
     }
 
+    /*
+    This shows the disadvantage of mocking: you don't have the actual behaviour of the class/interface.
+    To mimic the real behaviour of a class/interface, use spy.
+    Check SpyTest.java for spy.
+     */
+    @Test // This shows the disadvantage of mocking: you don't have the actual behaviour of the class/interface
+    void mocking() {
+        ArrayList arrayListMock = mock(ArrayList.class);
 
+        arrayListMock.add("1st member"); // This is not actually added to the mock
+        System.out.println(arrayListMock.size()); // 0 (default) - "1st member" is not added
+
+        when(arrayListMock.size()).thenReturn(1); // Telling the mock to behave a certain way
+        System.out.println(arrayListMock.size()); // 1 - since it's told so above
+    }
 }
