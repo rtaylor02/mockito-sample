@@ -13,11 +13,16 @@ public class SpyTest {
         System.out.println(arrayListSpy.size()); // 1
         System.out.println(arrayListSpy.get(0)); // "1st member"
 
-        when(arrayListSpy.size()).thenReturn(5); // Override the original behaviour
+        arrayListSpy.add("2nd member");
+        System.out.println(arrayListSpy.size()); // 2
+
+        when(arrayListSpy.size()).thenReturn(5); // Overrides the original behaviour
         System.out.println(arrayListSpy.size()); // 5
 
-        //verify(arrayListSpy).add("2nd member"); // failed
-        verify(arrayListSpy).add("1st member"); // pass
+        //verify(arrayListSpy).add("3rd member"); // failed - add() with "3rd member" arg is never called
+        verify(arrayListSpy).add("1st member"); // pass - add() with "1st member" arg is called once
+
+
     }
 
 }
