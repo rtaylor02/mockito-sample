@@ -30,11 +30,11 @@ class HelloWorldControllerTest {
                 .accept(MediaType.APPLICATION_JSON);
 
         // Test the response
-        MvcResult response = mockMvc.perform(request)
-                //.andExpect(status().isOk())
-                //.andExpect(content().string("Hello World, Rod!!"))
+        MvcResult result = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().string("Hello World, Rod!!"))
                 .andReturn();
         
-        assertEquals("Hello World, Rod!!", response.getContentAsString());
+        assertEquals("Hello World, Rod!!", result.getResponse().getContentAsString());
     }
 }
