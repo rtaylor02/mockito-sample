@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ItemControllerTest {
 
-    @Test
+    @Test // Here you will test the content of the dummy item returned from the ItemController
     void getDummyItem() {
 
     }
