@@ -8,7 +8,7 @@ import com.rtaylor02.mockitosample.business.ItemBusinessService;
 
 @RestController
 public class ItemController {
-    @Autowired
+    //@Autowired
     private ItemBusinessService businessService;
 
     @GetMapping("/dummy-item")
@@ -18,7 +18,7 @@ public class ItemController {
 
     @GetMapping("/item-from-business-service") // Note the dependency on ItemBusinessService
     public Item getItemFromBusinessService() {
-        return businessService.retrieveItem();
+        return businessService.retrieveHardCodedItem();
     }
 
 
