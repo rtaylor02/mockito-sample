@@ -1,9 +1,12 @@
 package com.rtaylor02.mockitosample.controller;
 
+import com.rtaylor02.mockitosample.business.ItemBusinessService;
+import com.rtaylor02.mockitosample.model.Item;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -11,13 +14,17 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ItemController.class)
+@WebMvcTest(ItemController.class) // Tells the application to load ItemController bean ONLY (dependencies NOT included)
 class ItemControllerTest {
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean // Required to mock beans other than that loaded by @WebMvcTest annotation
+    private ItemBusinessService businessService;
 
     @Test // Here you will test the content of the dummy item returned from the ItemController
     void getDummyItem() throws Exception {
@@ -73,5 +80,20 @@ class ItemControllerTest {
 //                "{id: 1,name:Ball}",
 //                result.getResponse().getContentAsString(),
 //                false); // pass
+    }
+
+    @Test
+    void getItemFromBusinessService() throws Exception {
+        when(businessService.retrieveHardCodedItem())
+                .thenReturn(new Item(2, "Ball 2", 50, 20)); // Mock the behaviour of businessService
+
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/item-from-business-service")
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().json("{ id:2, name: \"Ball 2\" }"))
+                .andReturn();
     }
 }

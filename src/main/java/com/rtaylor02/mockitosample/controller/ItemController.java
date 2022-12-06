@@ -8,7 +8,7 @@ import com.rtaylor02.mockitosample.business.ItemBusinessService;
 
 @RestController
 public class ItemController {
-    //@Autowired
+    @Autowired
     private ItemBusinessService businessService;
 
     @GetMapping("/dummy-item")
