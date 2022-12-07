@@ -13,6 +13,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -84,8 +86,9 @@ class ItemControllerTest {
 
     @Test
     void getItemFromBusinessService() throws Exception {
+        // Mock the behaviour of businessService
         when(businessService.retrieveHardCodedItem())
-                .thenReturn(new Item(2, "Ball 2", 50, 20)); // Mock the behaviour of businessService
+                .thenReturn(new Item(2, "Ball 2", 50, 20));
 
         RequestBuilder request = MockMvcRequestBuilders
                 .get("/item-from-business-service")
@@ -94,6 +97,28 @@ class ItemControllerTest {
         MvcResult result = mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(content().json("{ id:2, name: \"Ball 2\" }"))
+                .andReturn();
+    }
+
+    @Test
+    void getAllItemsFromDb() throws Exception{
+        // Mock the behaviour of businessService
+        when(businessService.retrieveAllItems())
+                .thenReturn(Arrays.asList(
+                        new Item(2, "Ball 2", 50, 20),
+                        new Item(3, "Ball 3", 22, 30)
+                ));
+
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/all-items-from-database")
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                // Note for json: array of JSON as mocked above
+                // - Number of elements in the array must matched as mocked above
+                // - elements of the item can even be empty, i.e. { } - not checked to the tee
+                .andExpect(content().json("[{ id:2, name: \"Ball 2\" }, { id:3, name: \"Ball 3\", price: 22 }]"))
                 .andReturn();
     }
 }

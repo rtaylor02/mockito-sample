@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.rtaylor02.mockitosample.business.ItemBusinessService;
 
+import java.util.List;
+
 @RestController
 public class ItemController {
     @Autowired
@@ -21,5 +23,9 @@ public class ItemController {
         return businessService.retrieveHardCodedItem();
     }
 
+    @GetMapping("/all-items-from-database") // Note the dependency on ItemBusinessService
+    public List<Item> getAllItemsFromDb() {
+        return businessService.retrieveAllItems();
+    }
 
 }

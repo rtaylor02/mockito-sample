@@ -19,6 +19,12 @@ public class ItemBusinessService {
     }
 
     public List<Item> retrieveAllItems() {
-        return itemRepository.findAll();
+        List<Item> items = itemRepository.findAll();
+
+        for(Item i : items) {
+            i.setValue(i.getPrice() * i.getQuantity());
+        }
+
+        return items;
     }
 }
