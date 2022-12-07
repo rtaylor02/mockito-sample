@@ -10,8 +10,6 @@ public class MockitoSampleApplication {
 
 	public static void main(String[] args) {
 		ApplicationContext ctx =  SpringApplication.run(MockitoSampleApplication.class, args);
-		ItemBusinessService businessService = ctx.getBean((ItemBusinessService.class));
-		System.out.println(businessService);
 	}
 
 }

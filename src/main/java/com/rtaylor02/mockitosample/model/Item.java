@@ -30,6 +30,30 @@ public class Item {
         this.quantity = quantity;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
     public int getId() {
         return id;
     }
@@ -44,10 +68,6 @@ public class Item {
 
     public int getQuantity() {
         return quantity;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
     }
 
     @Override
