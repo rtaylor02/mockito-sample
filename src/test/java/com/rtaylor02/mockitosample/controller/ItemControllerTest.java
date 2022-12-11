@@ -15,10 +15,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ItemController.class) // Tells the application to load ItemController bean ONLY (dependencies NOT included)
 class ItemControllerTest {
@@ -30,6 +30,13 @@ class ItemControllerTest {
 
     @Test // Here you will test the content of the dummy item returned from the ItemController
     void getDummyItem() throws Exception {
+        /*
+        MockMvcRequestBuilders static methods for request methods:
+        - .get()
+        - .post()
+        - .put()
+        - .delete()
+         */
         RequestBuilder request = MockMvcRequestBuilders
                 .get("/dummy-item")
                 .accept(MediaType.APPLICATION_JSON);
@@ -51,8 +58,15 @@ class ItemControllerTest {
                 - spaces are ignored
                 - partial elements are ok
                 - no need for escape characters \"
+
+         Response status:
+         200-success, 201-created, 400-bad request, 401-unauthorised, 404-resource not found, 500-server error, etc.
+         Corresponding StatusResultMatchers: isOk(), isCreated(), isBadRequest(), isUnauthorized(), isNotFound(),
+         is5xxServerError(), etc
+
          */
-        MvcResult result = mockMvc.perform(request)
+        MvcResult result = mockMvc
+                .perform(request)
                 .andExpect(status().isOk())
 
 //                .andExpect(content().string(
@@ -87,14 +101,16 @@ class ItemControllerTest {
     @Test
     void getItemFromBusinessService() throws Exception {
         // Mock the behaviour of businessService
-        when(businessService.retrieveHardCodedItem())
+        when(businessService
+                .retrieveHardCodedItem())
                 .thenReturn(new Item(2, "Ball 2", 50, 20));
 
         RequestBuilder request = MockMvcRequestBuilders
                 .get("/item-from-business-service")
                 .accept(MediaType.APPLICATION_JSON);
 
-        MvcResult result = mockMvc.perform(request)
+        MvcResult result = mockMvc
+                .perform(request)
                 .andExpect(status().isOk())
                 .andExpect(content().json("{ id:2, name: \"Ball 2\" }"))
                 .andReturn();
@@ -103,7 +119,8 @@ class ItemControllerTest {
     @Test
     void getAllItemsFromDb() throws Exception{
         // Mock the behaviour of businessService
-        when(businessService.retrieveAllItems())
+        when(businessService
+                .retrieveAllItems())
                 .thenReturn(Arrays.asList(
                         new Item(2, "Ball 2", 50, 20),
                         new Item(3, "Ball 3", 22, 30)
@@ -113,12 +130,29 @@ class ItemControllerTest {
                 .get("/all-items-from-database")
                 .accept(MediaType.APPLICATION_JSON);
 
-        MvcResult result = mockMvc.perform(request)
+        MvcResult result = mockMvc
+                .perform(request)
                 .andExpect(status().isOk())
                 // Note for json: array of JSON as mocked above
                 // - Number of elements in the array must matched as mocked above
                 // - elements of the item can even be empty, i.e. { } - not checked to the tee
                 .andExpect(content().json("[{ id:2, name: \"Ball 2\" }, { id:3, name: \"Ball 3\", price: 22 }]"))
+                .andReturn();
+    }
+
+    // This is a sample of testing a POST method
+    @Test
+    void createItem() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/items")
+                .accept(MediaType.APPLICATION_JSON)
+                .content("{\"id\":11, \"name\":\"Ball 11\", \"price\":15, \"quantity\": 25}")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mockMvc
+                .perform(requestBuilder)
+                .andExpect(status().isCreated())
+                .andExpect(header().string("location", containsString("/item")))
                 .andReturn();
     }
 }
