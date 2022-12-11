@@ -1,6 +1,7 @@
 package com.rtaylor02.mockitosample.controller;
 
 import com.rtaylor02.mockitosample.business.ItemBusinessService;
+import com.rtaylor02.mockitosample.data.ItemRepository;
 import com.rtaylor02.mockitosample.model.Item;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /*
 @SpringBootTest: looks for classes in this package and its parents that has @SpringBootApplication.
-It will then run the MockitoSampleApplication.java and run SB as normal app.
+It will then run the MockitoSampleApplication.java and run SB as normal app. This is the point of
+integration test: to test all the layers in our application:
+1) Web layer: controller classes
+2) Business layer: service classes
+3) Data layer: repository classes
 
 WebEnvironment.RANDOM_PORT: allows any port to be used for test. This is good for Continuous Integration test that
 can be from any port.
@@ -37,6 +42,14 @@ class ItemControllerTestIT {
      */
     @Autowired
     private TestRestTemplate testRestTemplate;
+
+    /*
+    @MockBean: use this if you want to mock external resources, e.g. repository, file, etc.
+    Then we can use when().thenReturn() method to test.
+    Note: see ItemControllerTest.java for sample codes.
+     */
+//    @MockBean
+//    private ItemRepository repository;
 
     @Test // Call a service and test the response
     void contextLoads() throws JSONException {
