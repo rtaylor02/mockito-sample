@@ -31,6 +31,7 @@ class SomeBusinessMockTest {
     ==================================
      */
 
+    // Arrange
     @InjectMocks
     SomeBusinessImpl business;
     @Mock
@@ -38,19 +39,28 @@ class SomeBusinessMockTest {
 
     @Test
     void sum_usingSomeDataService() {
+        // Act
         when(serviceMock.retriveAllData()).thenReturn(new int[]{1, 2, 3});
+
+        // Assert
         assertEquals(6, business.sum_usingSomeDataService());
     }
 
     @Test
     void sum_empty_usingSomeDataService() {
+        // Act
         when(serviceMock.retriveAllData()).thenReturn(new int[]{});
+
+        // Assert
         assertEquals(0, business.sum_usingSomeDataService());
     }
 
     @Test
     void sum_one_usingSomeDataService() {
+        // Act
         when(serviceMock.retriveAllData()).thenReturn(new int[]{3});
+
+        // Assert
         assertEquals(3, business.sum_usingSomeDataService());
     }
 }
